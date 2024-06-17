@@ -2,6 +2,7 @@
 session_start();
 require 'db.php';
 
+// Verifica se o usuário está logado, se não, redireciona para a página de login
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit;
@@ -17,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         $categoria_id = $_POST['categoria_id'];
         $usuario_id = $_SESSION['usuario_id'];
 
+        // Inserir uma nova tarefa no banco de dados
+        // SQL: INSERT INTO tarefas (usuario_id, titulo, descricao, status, categoria_id, data_criacao) VALUES (:usuario_id, :titulo, :descricao, :status, :categoria_id, NOW())
         $stmt = $pdo->prepare("INSERT INTO tarefas (usuario_id, titulo, descricao, status, categoria_id, data_criacao) VALUES (:usuario_id, :titulo, :descricao, :status, :categoria_id, NOW())");
         $stmt->execute(['usuario_id' => $usuario_id, 'titulo' => $titulo, 'descricao' => $descricao, 'status' => $status, 'categoria_id' => $categoria_id]);
 
@@ -24,6 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
     } elseif ($acao == 'excluir') {
         $tarefa_id = $_POST['tarefa_id'];
 
+        // Excluir uma tarefa específica do banco de dados
+        // SQL: DELETE FROM tarefas WHERE id = :id AND usuario_id = :usuario_id
         $stmt = $pdo->prepare("DELETE FROM tarefas WHERE id = :id AND usuario_id = :usuario_id");
         $stmt->execute(['id' => $tarefa_id, 'usuario_id' => $_SESSION['usuario_id']]);
 
@@ -35,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         $status = $_POST['status'];
         $categoria_id = $_POST['categoria_id'];
 
+        // Atualizar uma tarefa específica no banco de dados
+        // SQL: UPDATE tarefas SET titulo = :titulo, descricao = :descricao, status = :status, categoria_id = :categoria_id WHERE id = :id AND usuario_id = :usuario_id
         $stmt = $pdo->prepare("UPDATE tarefas SET titulo = :titulo, descricao = :descricao, status = :status, categoria_id = :categoria_id WHERE id = :id AND usuario_id = :usuario_id");
         $stmt->execute(['titulo' => $titulo, 'descricao' => $descricao, 'status' => $status, 'categoria_id' => $categoria_id, 'id' => $tarefa_id, 'usuario_id' => $_SESSION['usuario_id']]);
 
@@ -43,6 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         $tarefa_id = $_POST['tarefa_id'];
         $status = $_POST['status'];
 
+        // Atualizar o status de uma tarefa específica no banco de dados
+        // SQL: UPDATE tarefas SET status = :status WHERE id = :id AND usuario_id = :usuario_id
         $stmt = $pdo->prepare("UPDATE tarefas SET status = :status WHERE id = :id AND usuario_id = :usuario_id");
         $stmt->execute(['status' => $status, 'id' => $tarefa_id, 'usuario_id' => $_SESSION['usuario_id']]);
 
@@ -80,6 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         <select name="categoria_id" required>
             <option value="">Selecione uma Categoria</option>
             <?php
+            // Seleciona todas as categorias do usuário no banco de dados
+            // SQL: SELECT * FROM categorias WHERE usuario_id = :usuario_id
             $stmt = $pdo->prepare("SELECT * FROM categorias WHERE usuario_id = :usuario_id");
             $stmt->execute(['usuario_id' => $_SESSION['usuario_id']]);
             $categorias = $stmt->fetchAll();
@@ -94,6 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
     <!-- Listagem de tarefas do usuário -->
     <h2>Minhas Tarefas</h2>
     <?php
+    // Seleciona todas as tarefas do usuário, juntando com as categorias
+    // SQL: SELECT tarefas.*, categorias.nome AS categoria_nome FROM tarefas LEFT JOIN categorias ON tarefas.categoria_id = categorias.id WHERE tarefas.usuario_id = :usuario_id
     $stmt = $pdo->prepare("SELECT tarefas.*, categorias.nome AS categoria_nome FROM tarefas LEFT JOIN categorias ON tarefas.categoria_id = categorias.id WHERE tarefas.usuario_id = :usuario_id");
     $stmt->execute(['usuario_id' => $_SESSION['usuario_id']]);
     $tarefas = $stmt->fetchAll();

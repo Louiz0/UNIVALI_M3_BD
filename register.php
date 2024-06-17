@@ -4,16 +4,18 @@ require 'db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
-    $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
+    $senha = $_POST['senha']; // Senha sem criptografia
 
+    // Preparar uma instrução SQL para inserir um novo usuário na tabela 'usuarios' com os valores fornecidos.
+    // SQL: INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)
     $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)");
     $stmt->execute(['nome' => $nome, 'email' => $email, 'senha' => $senha]);
 
     echo "Usuário cadastrado com sucesso!";
-    header("Location: login.php");
+    header("Location: login.php"); // Redireciona para o login após o cadastro
+    exit;
 }
 ?>
-
 <!-- Formulário de cadastro de usuário (register.php) -->
 <form method="POST">
     <input type="text" name="nome" placeholder="Nome" required><br>
