@@ -14,16 +14,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmar'])) {
 
         // Excluir tarefas do usuário
         // SQL: DELETE FROM tarefas WHERE usuario_id = 'usuario_id';
+        // DELETE FROM tarefas WHERE usuario_id = valor_do_usuario_id;
         $stmt = $pdo->prepare("DELETE FROM tarefas WHERE usuario_id = :usuario_id");
         $stmt->execute(['usuario_id' => $usuario_id]);
 
         // Excluir categorias do usuário
         // SQL: DELETE FROM categorias WHERE usuario_id = 'usuario_id';
+        // DELETE FROM categorias WHERE usuario_id = valor_do_usuario_id;
         $stmt = $pdo->prepare("DELETE FROM categorias WHERE usuario_id = :usuario_id");
         $stmt->execute(['usuario_id' => $usuario_id]);
 
         // Excluir usuário
         // SQL: DELETE FROM usuarios WHERE id = 'id';
+        // DELETE FROM usuarios WHERE usuario_id = valor_do_usuario_id
         $stmt = $pdo->prepare("DELETE FROM usuarios WHERE id = :id");
         $stmt->execute(['id' => $usuario_id]);
 

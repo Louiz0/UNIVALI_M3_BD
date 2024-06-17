@@ -8,6 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Preparar uma instrução SQL para inserir um novo usuário na tabela 'usuarios' com os valores fornecidos.
     // SQL: INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)
+    // INSERT INTO usuarios (nome, email, senha) VALUES ('valor_do_nome', 'valor_do_email', 'valor_da_senha');
+
     $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)");
     $stmt->execute(['nome' => $nome, 'email' => $email, 'senha' => $senha]);
 

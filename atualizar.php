@@ -17,6 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
         
         // Atualiza o nome do usuário no banco de dados
         // SQL: UPDATE usuarios SET nome = :nome WHERE id = :id
+        // UPDATE usuarios SET nome = 'valor_do_nome' WHERE id = valor_do_id;
+
         $stmt = $pdo->prepare("UPDATE usuarios SET nome = :nome WHERE id = :id");
         $stmt->execute(['nome' => $novo_nome, 'id' => $usuario_id]);
 
@@ -29,6 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
 
         // Seleciona o usuário do banco de dados para verificar a senha atual
         // SQL: SELECT * FROM usuarios WHERE id = :id
+        // SELECT * FROM usuarios WHERE id = valor_do_id;
+
         $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = :id");
         $stmt->execute(['id' => $usuario_id]);
         $usuario = $stmt->fetch();
@@ -37,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
             
             // Atualiza a senha do usuário no banco de dados
             // SQL: UPDATE usuarios SET senha = :senha WHERE id = :id
+            // UPDATE usuarios SET senha = 'valor_da_senha' WHERE id = valor_do_id;
             $stmt = $pdo->prepare("UPDATE usuarios SET senha = :senha WHERE id = :id");
             $stmt->execute(['senha' => $nova_senha, 'id' => $usuario_id]);
 

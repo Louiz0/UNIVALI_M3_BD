@@ -7,7 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $senha = $_POST['senha'];
 
     // Preparar uma instrução SQL para selecionar todos os dados da tabela 'usuarios' onde o email corresponde ao fornecido.
-    // SQL: SELECT * FROM usuarios WHERE email = :email
+    // SQL: SELECT * FROM usuarios WHERE email = :email --- SELECT * FROM usuarios WHERE email = 'valor_do_email';
+
     $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = :email");
     $stmt->execute(['email' => $email]);
     $usuario = $stmt->fetch(); // Executa a consulta e busca os resultados.
